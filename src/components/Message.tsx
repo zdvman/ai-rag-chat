@@ -38,7 +38,7 @@ export const Message = ({ content, isUserMessage }: MessageProps) => {
           <div className='flex flex-col ml-6 w-full'>
             <div className='flex items-center space-x-2'>
               <span className='text-sm font-semibold text-gray-900 dark:text-white'>
-                {isUserMessage ? 'You' : 'Website'}
+                {isUserMessage ? 'You' : 'Anthony Nolan AI Assistant'}
               </span>
             </div>
 

@@ -3,6 +3,8 @@
 import { cn } from '@/lib/utils';
 import { Bot, User } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm'; // For advanced Markdown support
+
 interface MessageProps {
   content: string;
   isUserMessage: boolean;
@@ -40,8 +42,25 @@ export const Message = ({ content, isUserMessage }: MessageProps) => {
               </span>
             </div>
 
+            {/* Render content using ReactMarkdown */}
             <p className='text-sm font-normal py-2.5 text-gray-900 dark:text-white'>
-              <ReactMarkdown>{content}</ReactMarkdown>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]} // Use GFM for tables, strikethrough, etc.
+                components={{
+                  a: ({ href, children }) => (
+                    <a
+                      href={href}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='text-blue-500 underline hover:text-blue-700'
+                    >
+                      {children}
+                    </a>
+                  ),
+                }}
+              >
+                {content}
+              </ReactMarkdown>
             </p>
           </div>
         </div>

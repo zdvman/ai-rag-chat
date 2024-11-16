@@ -1,3 +1,5 @@
+//src/app/page.tsx
+
 // import Link from 'next/link';
 import { ChatWrapper } from '@/components/ChatWrapper';
 import { ragChat } from '@/lib/rag-chat';

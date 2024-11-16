@@ -1,22 +1,40 @@
-import Link from 'next/link';
+// import Link from 'next/link';
+import { ChatWrapper } from '@/components/ChatWrapper';
+import { ragChat } from '@/lib/rag-chat';
+import { cookies } from 'next/headers';
+// import { processDomain } from '@/lib/parsing';
 
-export default function Home() {
+// Ensure the domain is processed on the server once before any user interaction
+// async function ensureDomainProcessed(domain: string) {
+//   try {
+//     await processDomain(domain);
+//     console.log('Domain processing completed!');
+//   } catch (error) {
+//     console.error('Error during domain processing:', error);
+//   }
+// }
+
+// Server-side action: Trigger domain processing
+// ensureDomainProcessed('https://www.anthonynolan.org/');
+
+export default async function Home() {
+  // Get the session ID from cookies
+  const sessionCookie = cookies().get('sessionId')?.value;
+
+  // Construct session ID
+  const sessionId = (
+    'https://www.anthonynolan.org/' +
+    '--' +
+    sessionCookie
+  ).replace(/\//g, '');
+
+  // Fetch initial messages from history for the chat
+  const initialMessages = await ragChat.history.getMessages({
+    amount: 10,
+    sessionId,
+  });
+
   return (
-    <main className='flex min-h-screen justify-center items-center'>
-      <div className='w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30'>
-        <div className='mb-3 ml-1'>
-          Enter a website URL as the route to get started collect data from the
-          website for ai-chatbot
-          <Link
-            className='block underline'
-            href='https://ai-rag-chat.vercel.app//https://www.anthonynolan.org/help-save-a-life/join-stem-cell-register'
-          >
-            {
-              'http://localhost:3000/https://www.anthonynolan.org/help-save-a-life/join-stem-cell-register'
-            }
-          </Link>
-        </div>
-      </div>
-    </main>
+    <ChatWrapper sessionId={sessionId} initialMessages={initialMessages} />
   );
 }
